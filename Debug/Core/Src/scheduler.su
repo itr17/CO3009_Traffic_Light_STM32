@@ -1,0 +1,9 @@
+sch_port.h:11:24:SCH_Lock	16	static,ignoring_inline_asm
+sch_port.h:21:20:SCH_Unlock	24	static,ignoring_inline_asm
+scheduler.c:10:17:Get_New_Task_ID	4	static
+scheduler.c:15:6:SCH_Init	8	static
+scheduler.c:22:6:SCH_Update	4	static
+scheduler.c:29:17:Insert	56	static
+scheduler.c:56:10:SCH_Add_Task	32	static
+scheduler.c:63:6:SCH_Dispatch_Tasks	40	static
+scheduler.c:74:9:SCH_Delete_Task	32	static

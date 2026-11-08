@@ -1,0 +1,6 @@
+fsm_tuning.c:26:13:discard_setting_changes	0	static
+fsm_tuning.c:57:13:increase_selected_duration	0	static
+fsm_tuning.c:156:20:process_button	16	static
+fsm_tuning.c:204:6:fsm_for_input_processing	8	static
+fsm_tuning.c:211:6:fsm_tuning_init	8	static
+fsm_tuning.c:230:6:fsm_tuning_run	16	static

@@ -1,0 +1,8 @@
+lcd.c:12:13:lcd_encode_byte	24	static
+lcd.c:25:19:lcd_send_cmd	32	static
+lcd.c:34:19:lcd_send_data	32	static
+lcd.c:43:6:lcd_clear	8	static
+lcd.c:51:19:lcd_goto_XY	24	static
+lcd.c:72:6:lcd_init	8	static
+lcd.c:96:19:lcd_send_string	24	static
+lcd.c:106:19:lcd_write_line	96	static

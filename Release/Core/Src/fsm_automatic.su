@@ -1,0 +1,6 @@
+fsm_automatic.c:25:13:check_duration	12	static
+fsm_automatic.c:37:16:get_phase_duration	0	static
+fsm_automatic.c:51:13:update_countdown_display	0	static
+fsm_automatic.c:7:13:render_phase	16	static
+fsm_automatic.c:76:6:fsm_automatic_init	8	static
+fsm_automatic.c:86:6:fsm_automatic_run	8	static

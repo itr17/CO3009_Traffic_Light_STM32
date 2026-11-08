@@ -1,0 +1,4 @@
+dht20.c:24:16:DHT20_CalculateCRC	24	static
+dht20.c:39:6:DHT20_InitState	8	static
+dht20.c:46:5:DHT20_Tick	32	static
+dht20.c:113:9:DHT20_Read	48	static

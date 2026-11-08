@@ -1,0 +1,9 @@
+fsm_manual.c:18:13:start_phase_change_wait	8	static
+fsm_manual.c:24:13:next_status	8	static
+fsm_manual.c:45:13:previous_status	8	static
+fsm_manual.c:68:20:process_button	16	static
+fsm_manual.c:113:6:fsm_for_input_processing	8	static
+fsm_manual.c:121:6:fsm_manual_init	8	static
+fsm_manual.c:133:9:fsm_manual_phase_change_active	4	static
+fsm_manual.c:138:9:fsm_manual_phase_change_seconds	16	static
+fsm_manual.c:147:6:fsm_manual_run	16	static
