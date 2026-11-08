@@ -1,3 +1,0 @@
-software_timer.c:6:6:setTimer	16	static
-software_timer.c:15:6:timerRun	16	static
-software_timer.c:27:9:isTimerExpired	24	static

@@ -1,3 +1,0 @@
-fsm_manual.c:8:13:render_manual_phase	16	static
-fsm_manual.c:27:6:fsm_manual_init	8	static
-fsm_manual.c:34:6:fsm_manual_run	16	static
