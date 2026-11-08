@@ -7,15 +7,15 @@
 
 ---
 
-## 👥 Thành viên nhóm
+## Thành viên nhóm
 | STT | Họ và tên | MSSV | Nhiệm vụ chính |
 |:---:|:---|:---:|:---|
-| 1 | [Họ và tên thành viên 1] | [MSSV 1] | Viết báo cáo, thiết kế FSM, quản lý tài liệu & Git |
-| 2 | [Họ và tên thành viên 2] | [MSSV 2] | Lập trình driver phần cứng, scheduler O(1), kiểm thử mạch |
+| 1 | [Nguyễn Thái Minh Trí] | [2413646] | Viết báo cáo, thiết kế FSM, quản lý tài liệu & Git |
+| 2 | [Nguyễn Lâm Sơn] | [2413012] | Lập trình driver phần cứng, scheduler O(1), kiểm thử mạch |
 
 ---
 
-## 📌 Giới thiệu dự án
+## Giới thiệu dự án
 Hệ thống điều khiển đèn giao thông cho ngã tư 2 tuyến đường hoạt động trên vi điều khiển **STM32F103RB** (mạch XNUCLEO-F103RB) kết hợp board mở rộng GROVE Shield. Toàn bộ tác vụ được điều phối bởi **Hệ thống định thời thời gian thực (Scheduler)** với thuật toán cập nhật đạt độ phức tạp **$O(1)$**.
 
 ### Các tính năng chính:
@@ -26,7 +26,7 @@ Hệ thống điều khiển đèn giao thông cho ngã tư 2 tuyến đường 
 
 ---
 
-## 🔌 Sơ đồ kết nối phần cứng (Pinout)
+## Sơ đồ kết nối phần cứng (Pinout)
 
 ### 1. Module đèn giao thông (2 chân tín hiệu / module)
 | Module | Chân Shield GROVE | Chân STM32 | User Label | Chế độ GPIO |
@@ -55,7 +55,7 @@ Hệ thống điều khiển đèn giao thông cho ngã tư 2 tuyến đường 
 
 ---
 
-## 🏗️ Cấu trúc thư mục mã nguồn
+## Cấu trúc thư mục mã nguồn
 ```text
 btl/
 ├── Core/
@@ -78,7 +78,7 @@ btl/
 
 ---
 
-## 🚀 Hướng dẫn Build và Nạp chương trình
+## Hướng dẫn Build và Nạp chương trình
 
 ### Yêu cầu phần mềm
 * **STM32CubeIDE** (phiên bản 1.10.0 trở lên)
@@ -87,8 +87,8 @@ btl/
 ### Các bước thực hiện:
 1. **Clone repository về máy:**
    ```bash
-   git clone https://github.com/<tai-khoan>/<ten-repo>.git
-   cd <ten-repo>
+   git clone https://github.com/itr17/CO3009_Traffic_Light_STM32.git
+   cd CO3009_Traffic_Light_STM32
    git checkout dev
    ```
 2. **Mở dự án trên STM32CubeIDE:**
