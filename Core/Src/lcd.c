@@ -8,6 +8,25 @@ extern I2C_HandleTypeDef hi2c1;
 #define LCD_LINE_LENGTH 16U
 #define LCD_EXPANDER_BYTES_PER_CHAR 4U
 #define LCD_LINE_PACKET_SIZE (LCD_EXPANDER_BYTES_PER_CHAR * (LCD_LINE_LENGTH + 1U))
+#define LCD_INIT_COMMAND_COUNT 9U
+#define LCD_CLEAR_COMMAND 0x01U
+
+static const uint8_t lcd_init_commands[LCD_INIT_COMMAND_COUNT] = {
+    0x30U, 0x30U, 0x30U, 0x20U, 0x28U, 0x08U, LCD_CLEAR_COMMAND, 0x06U, 0x0CU
+};
+static const uint32_t lcd_init_delays[LCD_INIT_COMMAND_COUNT] = {
+    5U, 1U, 10U, 10U, 1U, 1U, 2U, 1U, 0U
+};
+static uint8_t lcd_init_step;
+static uint8_t lcd_init_state;
+static uint32_t lcd_init_deadline;
+
+enum {
+    LCD_INIT_NOT_STARTED = 0U,
+    LCD_INIT_RUNNING,
+    LCD_INIT_READY,
+    LCD_INIT_ERROR
+};
 
 static void lcd_encode_byte(uint8_t value, uint8_t rs, uint8_t *output)
 {
@@ -30,6 +49,10 @@ HAL_StatusTypeDef lcd_send_cmd(uint8_t cmd) {
                                    LCD_I2C_TIMEOUT_MS);
 }
 
+HAL_StatusTypeDef lcd_clear(void) {
+    return lcd_send_cmd(LCD_CLEAR_COMMAND);
+}
+
 /* Hàm gửi dữ liệu/ký tự (Data) tới LCD qua I2C */
 HAL_StatusTypeDef lcd_send_data(uint8_t data) {
     uint8_t data_t[4];
@@ -37,14 +60,6 @@ HAL_StatusTypeDef lcd_send_data(uint8_t data) {
 
     return HAL_I2C_Master_Transmit(&hi2c1, LCD_ADDR, data_t, sizeof(data_t),
                                    LCD_I2C_TIMEOUT_MS);
-}
-
-/* Hàm xóa nội dung màn hình */
-void lcd_clear(void) {
-    if (lcd_send_cmd(0x01) != HAL_OK) {
-        return;
-    }
-    HAL_Delay(2);
 }
 
 /* Hàm đặt vị trí con trỏ (row: 0-1, col: 0-15) */
@@ -68,28 +83,48 @@ HAL_StatusTypeDef lcd_goto_XY(int row, int col) {
     return lcd_send_cmd(address);
 }
 
-/* Hàm khởi tạo màn hình LCD chế độ 4-bit */
+/* Bắt đầu khởi tạo LCD; các bước được thực hiện trong lcd_init_tick(). */
 void lcd_init(void) {
-    HAL_Delay(50);
-    lcd_send_cmd(0x30);
-    HAL_Delay(5);
-    lcd_send_cmd(0x30);
-    HAL_Delay(1);
-    lcd_send_cmd(0x30);
-    HAL_Delay(10);
-    lcd_send_cmd(0x20); // Chuyển sang 4-bit mode
-    HAL_Delay(10);
+    lcd_init_step = 0U;
+    lcd_init_state = LCD_INIT_RUNNING;
+    lcd_init_deadline = HAL_GetTick() + 50U;
+}
 
-    // Cấu hình hiển thị LCD
-    lcd_send_cmd(0x28); // Chế độ 4-bit, 2 hàng, font 5x8
-    HAL_Delay(1);
-    lcd_send_cmd(0x08); // Tắt hiển thị
-    HAL_Delay(1);
-    lcd_send_cmd(0x01); // Xóa màn hình
-    HAL_Delay(2);
-    lcd_send_cmd(0x06); // Tự động tăng con trỏ
-    HAL_Delay(1);
-    lcd_send_cmd(0x0C); // Bật hiển thị, tắt con trỏ
+HAL_StatusTypeDef lcd_init_tick(void) {
+    if (lcd_init_state == LCD_INIT_READY) {
+        return HAL_OK;
+    }
+    if (lcd_init_state == LCD_INIT_ERROR ||
+        lcd_init_state == LCD_INIT_NOT_STARTED) {
+        return HAL_ERROR;
+    }
+
+    uint32_t now = HAL_GetTick();
+    if ((int32_t)(now - lcd_init_deadline) < 0) {
+        return HAL_BUSY;
+    }
+
+    uint8_t command = lcd_init_commands[lcd_init_step];
+    HAL_StatusTypeDef status = (command == LCD_CLEAR_COMMAND)
+                                   ? lcd_clear()
+                                   : lcd_send_cmd(command);
+    if (status != HAL_OK) {
+        lcd_init_state = LCD_INIT_ERROR;
+        return status;
+    }
+
+    lcd_init_step++;
+    if (lcd_init_step == LCD_INIT_COMMAND_COUNT) {
+        lcd_init_state = LCD_INIT_READY;
+        return HAL_OK;
+    }
+
+    lcd_init_deadline = now + lcd_init_delays[lcd_init_step - 1U];
+    return HAL_BUSY;
+}
+
+uint8_t lcd_is_ready(void) {
+    return (uint8_t)(lcd_init_state == LCD_INIT_READY);
 }
 
 /* Hàm in một chuỗi ký tự */
