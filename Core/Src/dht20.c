@@ -110,33 +110,3 @@ int DHT20_Tick(float *temp, float *hum)
     }
 }
 
-uint8_t DHT20_Read(float *temp, float *hum) {
-    uint8_t send_buf[3] = {0xAC, 0x33, 0x00};
-    uint8_t read_buf[7] = {0};
-
-    if (HAL_I2C_Master_Transmit(&hi2c1, DHT20_ADDR, send_buf, sizeof(send_buf), DHT20_I2C_TIMEOUT_MS) != HAL_OK) {
-        return 0;
-    }
-
-    HAL_Delay(80);
-
-    if (HAL_I2C_Master_Receive(&hi2c1, DHT20_ADDR, read_buf, sizeof(read_buf), DHT20_I2C_TIMEOUT_MS) != HAL_OK) {
-        return 0;
-    }
-
-    if ((read_buf[0] & 0x80U) != 0U) {
-        return 0;
-    }
-
-    if (DHT20_CalculateCRC(read_buf, 6U) != read_buf[6]) {
-        return 0;
-    }
-
-    uint32_t raw_hum = ((uint32_t)read_buf[1] << 12) | ((uint32_t)read_buf[2] << 4) | ((uint32_t)read_buf[3] >> 4);
-    *hum = ((float)raw_hum / 1048576.0f) * 100.0f;
-
-    uint32_t raw_temp = (((uint32_t)read_buf[3] & 0x0F) << 16) | ((uint32_t)read_buf[4] << 8) | (uint32_t)read_buf[5];
-    *temp = ((float)raw_temp / 1048576.0f) * 200.0f - 50.0f;
-
-    return 1;
-}
